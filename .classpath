@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry excluding="**/*.java" kind="src" path="src/main/api"/>
+	<classpathentry excluding="**/*.java" kind="src" path="src/main/app"/>
+	<classpathentry kind="src" path="src/main/java"/>
+	<classpathentry excluding="**/*.java" kind="src" path="src/main/resources"/>
+	<classpathentry kind="src" output="target/test-classes" path="src/test/java"/>
+	<classpathentry excluding="**/*.java" kind="src" output="target/test-classes" path="src/test/resources"/>
+	<classpathentry kind="con" path="MULE_RUNTIME"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="var" path="M2_REPO/org/mule/tools/devkit/mule-devkit-shade/3.6.0/mule-devkit-shade-3.6.0.jar" sourcepath="M2_REPO/org/mule/tools/devkit/mule-devkit-shade/3.6.0/mule-devkit-shade-3.6.0-sources.jar"/>
+	<classpathentry kind="var" path="M2_REPO/org/mule/modules/mule-module-twitter/4.0.0/mule-module-twitter-4.0.0.jar" sourcepath="M2_REPO/org/mule/modules/mule-module-twitter/4.0.0/mule-module-twitter-4.0.0-sources.jar"/>
+	<classpathentry kind="lib" path="C:/Users/bhara/Downloads/Video/anypoint flowdesign/project/repository/b11934ef-c1eb-46e0-9a6e-c2cc9536b2d2/mysql-connector-java--bin/5.1.33/mysql-connector-java--bin-5.1.33-external-library.jar"/>
+	<classpathentry kind="output" path="target/classes"/>
+</classpath>

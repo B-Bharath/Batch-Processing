@@ -1,20 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<mule
-xmlns:context="http://www.springframework.org/schema/context"
-	xmlns:jms="http://www.mulesoft.org/schema/mule/jms"
+<mule xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:jms="http://www.mulesoft.org/schema/mule/jms" 
 	xmlns:batch="http://www.mulesoft.org/schema/mule/batch"
-xmlns:file="http://www.mulesoft.org/schema/mule/file"
-xmlns:dw="http://www.mulesoft.org/schema/mule/ee/dw"
-xmlns:db="http://www.mulesoft.org/schema/mule/db"
-xmlns:metadata="http://www.mulesoft.org/schema/mule/metadata"
-xmlns:sfdc="http://www.mulesoft.org/schema/mule/sfdc"
-xmlns:http="http://www.mulesoft.org/schema/mule/http"
-xmlns:tracking="http://www.mulesoft.org/schema/mule/ee/tracking"
-xmlns="http://www.mulesoft.org/schema/mule/core"
-xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
-xmlns:spring="http://www.springframework.org/schema/beans"
-xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-xsi:schemaLocation="http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-current.xsd
+	xmlns:file="http://www.mulesoft.org/schema/mule/file"
+	xmlns:dw="http://www.mulesoft.org/schema/mule/ee/dw"
+	xmlns:db="http://www.mulesoft.org/schema/mule/db" 
+	xmlns:metadata="http://www.mulesoft.org/schema/mule/metadata"
+	xmlns:sfdc="http://www.mulesoft.org/schema/mule/sfdc" 
+	xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns:tracking="http://www.mulesoft.org/schema/mule/ee/tracking" 
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:spring="http://www.springframework.org/schema/beans" 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-current.xsd
 http://www.mulesoft.org/schema/mule/jms http://www.mulesoft.org/schema/mule/jms/current/mule-jms.xsd
 http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-current.xsd
 http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
@@ -25,24 +24,35 @@ http://www.mulesoft.org/schema/mule/ee/dw http://www.mulesoft.org/schema/mule/ee
 http://www.mulesoft.org/schema/mule/file http://www.mulesoft.org/schema/mule/file/current/mule-file.xsd
 http://www.mulesoft.org/schema/mule/db http://www.mulesoft.org/schema/mule/db/current/mule-db.xsd
 http://www.mulesoft.org/schema/mule/batch http://www.mulesoft.org/schema/mule/batch/current/mule-batch.xsd">
-    <http:listener-config name="HTTP_Listener_Configuration" host="0.0.0.0" port="8081" doc:name="HTTP Listener Configuration"/>
-<http:request-config name="HTTP_Request_Configuration" host="localhost" port="8081" doc:name="HTTP Request Configuration"/>
-<context:property-placeholder location="example-${env}.properties"/>
-<sfdc:config name="Salesforce__Basic_Authentication" username="${sfdc.username}" password="${sfdc.password}" securityToken="${sfdc.token}" doc:name="Salesforce: Basic Authentication"/>
-<db:mysql-config name="MySQL_Configuration" host="${db.host}" port="${db.port}" user="${db.user}" password="${db.password}" database="${db.database}" doc:name="MySQL Configuration"/>
-<jms:activemq-connector name="Active_MQ" specification="1.1" brokerURL="${jms.broker}" validateConnections="true" doc:name="Active MQ"/>
-<batch:job name="pollDatabaseBatch">
-<batch:input>
-<poll doc:name="Poll">
-<fixed-frequency-scheduler frequency="5" timeUnit="SECONDS"/>
-<watermark variable="lastAccountID" default-expression="0" selector="MIN" selector-expression="#[payload.accountID]"/>
-<db:select config-ref="MySQL_Configuration" doc:name="Database">
-                    <db:parameterized-query><![CDATA[select * from accounts where postal='80305' and accountID > #[flowVars.lastAccountID]]]></db:parameterized-query>
-</db:select>
-</poll>
-<logger message="My Payload : #[payload]" level="INFO" doc:name="Logger"/>
-<dw:transform-message doc:name="Transform Message">
-<dw:set-payload>
+	<http:listener-config name="HTTP_Listener_Configuration"
+		host="0.0.0.0" port="8081" doc:name="HTTP Listener Configuration" />
+	<http:request-config name="HTTP_Request_Configuration"
+		host="localhost" port="8081" doc:name="HTTP Request Configuration" />
+	<context:property-placeholder location="example-${env}.properties" />
+	<sfdc:config name="Salesforce__Basic_Authentication"
+		username="${sfdc.username}" password="${sfdc.password}" securityToken="${sfdc.token}"
+		doc:name="Salesforce: Basic Authentication" />
+	<db:mysql-config name="MySQL_Configuration" host="${db.host}"
+		port="${db.port}" user="${db.user}" password="${db.password}"
+		database="${db.database}" doc:name="MySQL Configuration" />
+	<jms:activemq-connector name="Active_MQ"
+		specification="1.1" brokerURL="${jms.broker}" validateConnections="true"
+		doc:name="Active MQ" />
+	<batch:job name="pollDatabaseBatch">
+		<batch:input>
+			<poll doc:name="Poll">
+				<fixed-frequency-scheduler frequency="5"
+					timeUnit="SECONDS" />
+				<watermark variable="lastAccountID" default-expression="0"
+					selector="MIN" selector-expression="#[payload.accountID]" />
+				<db:select config-ref="MySQL_Configuration" doc:name="Database">
+					<db:parameterized-query><![CDATA[select * from accounts where postal='80305' and accountID > #[flowVars.lastAccountID]]]></db:parameterized-query>
+				</db:select>
+			</poll>
+			<logger message="My Payload : #[payload]" level="INFO"
+				doc:name="Logger" />
+			<dw:transform-message doc:name="Transform Message">
+				<dw:set-payload>
 <![CDATA[%dw 1.0
 %output application/java
 ---
@@ -55,25 +65,29 @@ BillingState: payload01.state,
 BillingPostalCode: payload01.postal,
 BillingCountry: payload01.country
 })]]>
-</dw:set-payload>
-</dw:transform-message>
-</batch:input>
-<batch:process-records>
-<batch:step name="Batch_Step1">
-<enricher source="#[payload.size() > 0]" target="#[recordVars.exists]" doc:name="Message Enricher">
-<sfdc:query config-ref="Salesforce__Basic_Authentication" query="dsql:SELECT Name FROM Account WHERE Name = '#[payload.Name]'" doc:name="Salesforce"/>
-</enricher>
-<logger level="INFO" doc:name="Logger"/>
-</batch:step>
-<batch:step name="Batch_Step2" accept-expression="#[!recordVars.exists]">
-<sfdc:create config-ref="Salesforce__Basic_Authentication"  doc:name="Salesforce" type="Account">
-<sfdc:objects ref="#[payload]"/>
-</sfdc:create>
-<logger level="INFO" doc:name="Logger"/>
-</batch:step>
-</batch:process-records>
-        <batch:on-complete>
-            <logger level="INFO" doc:name="Logger"/>
-        </batch:on-complete>
-</batch:job>
+				</dw:set-payload>
+			</dw:transform-message>
+		</batch:input>
+		<batch:process-records>
+			<batch:step name="Batch_Step1">
+				<enricher source="#[payload.size() > 0]" target="#[recordVars.exists]"
+					doc:name="Message Enricher">
+					<sfdc:query config-ref="Salesforce__Basic_Authentication"
+						query="dsql:SELECT Name FROM Account WHERE Name = '#[payload.Name]'"
+						doc:name="Salesforce" />
+				</enricher>
+				<logger level="INFO" doc:name="Logger" />
+			</batch:step>
+			<batch:step name="Batch_Step2" accept-expression="#[!recordVars.exists]">
+				<sfdc:create config-ref="Salesforce__Basic_Authentication"
+					doc:name="Salesforce" type="Account">
+					<sfdc:objects ref="#[payload]" />
+				</sfdc:create>
+				<logger level="INFO" doc:name="Logger" />
+			</batch:step>
+		</batch:process-records>
+		<batch:on-complete>
+			<logger level="INFO" doc:name="Logger" />
+		</batch:on-complete>
+	</batch:job>
 </mule>
